@@ -1,7 +1,7 @@
 # Compiler settings
 CC = gcc              # Compiler
 CFLAGS = -c -g           # Flags to compile without linking
-LDFLAGS = -lopenblas  # Link with OpenBLAS library
+LDFLAGS = -lgsl -lm -lopenblas  # Link with OpenBLAS library
 EXEC = spmv           # Output executable name
 
 # Source files
