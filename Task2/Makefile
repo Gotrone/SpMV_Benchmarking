@@ -1,5 +1,5 @@
 # Compiler settings
-CC = gcc  # Default compiler
+CC = icc  # Default compiler
 CFLAGS = $(OPTFLAGS) -c -g          # Flags to compile without linking
 LDFLAGS = -lgsl -lm -lopenblas  # Link with OpenBLAS library
 EXEC = spmv           # Output executable name
@@ -14,24 +14,23 @@ all: $(EXEC) run
 
 # Rule to link the object files and create the executable
 $(EXEC): $(OBJ)
-	@echo "Linking object files to create the executable..."
+	echo "Linking object files to create the executable..."
 	$(CC) $(OBJ) $(LDFLAGS) -o $(EXEC)
 
 # Rule to compile .c files into .o files
 %.o: %.c
-	@echo "Compiling $<..."
+	echo "Compiling $<..."
 	$(CC) $(CFLAGS) $<
 
 # Run the executable
 run: $(EXEC)
-	@echo "Running the program..."
+	echo "Running the program..."
 	./$(EXEC)
 
 # Clean up object files and the executable
 clean:
-	@echo "Cleaning up..."
+	echo "Cleaning up..."
 	rm -f $(OBJ) $(EXEC)
 
-
-#make : to compile and run
-#make clean : to remove the compile and executable file
+#make #to run
+#make clean #to clean

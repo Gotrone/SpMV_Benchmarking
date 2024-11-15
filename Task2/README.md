@@ -1,72 +1,3 @@
-# SpMV: Sparse Matrix-Vector Product
-
-This code is based on the use of GSL (GNU Scientific Library) for the
-implementation of the baseline operations used for comparison:
-- dense matrix-vector product: `cblas_dgemv()`, you need to link against *libgslcblas*
-- sparse matrix-vector product: `gsl_spblas_dgemv()`, you need to link against *libgsl*
-
-The dense product, cblas_dgemv(), can be found in other CBLAS
-implementation. You just need to change the library to be linked,
-eg. `-lopenblas` instead of `-lgslcblas`
-
-The basetype in GSL for working with sparse matrices is `gsl_spmatrix`.
-GSL also provides functions to help convert you dense matrices into a
-sparse format.
-
-
-## Features
-
-- **Dense Matrix-Vector Product** using the CBLAS library (GSL or OpenBLAS).
-- **Sparse Matrix-Vector Product** using GSL’s `gsl_spblas_dgemv()` for sparse matrices in CSR format.
-- Custom implementations for dense and sparse matrix-vector multiplication.
-- Performance comparison between dense and sparse matrix operations.
-
-## Contents
-- [Usage](#usage)
-- [Performance](#performance)
-- [Matrix Formats](#matrix-formats)
-- [Project Structure](#project-structure)
-
-## Usage
-
-1. **Running the Program**:
-   You can run the program with default settings (matrix size 1024x1024, 25% non-zero elements for sparse matrix):
-
-   `./spmv`
-
-    You can also specify custom matrix sizes and densities for the sparse matrix (e.g., matrix size 512 and 50% density):
-
-   `./spmv 512 0.5`
-
-
-2. **Sample Output**:
-   ```bash
-    Matrix size: 1024 x 1024 (1048576 elements)
-    261996 non-zero elements (24.99%)
-
-    Dense computation
-    ----------------
-    Time taken by CBLAS dense computation: 0 ms
-    Time taken by my dense matrix-vector product: 3 ms
-    Result is ok!
-
-    Sparse computation using GSL
-    ----------------
-    Time taken by GSL sparse matrix-vector product: 1 ms
-    GSL sparse result is ok!
-
-## Performance
-
-This project compares the performance of the following operations:
-
-- **Dense Matrix-Vector Product**:
-    - Using **CBLAS** (provided by GSL or OpenBLAS).
-    - Custom dense matrix-vector multiplication implementation.
-    
-- **Sparse Matrix-Vector Product**:
-    - Using GSL's `gsl_spblas_dgemv()` for sparse matrix-vector multiplication in **CSR (Compressed Sparse Row)** format.
-
-The execution times of these operations are printed after each computation, allowing you to observe how the performance varies with matrix size and density.
 
 ## Matrix Formats
 ### Dense Matrix Format
@@ -90,3 +21,29 @@ In CSR format, the matrix is represented using three arrays:
 - **`spmv.h`**: Header file that contains the function declarations and includes necessary GSL headers.
 - **`timer.c`**: Contains utility functions to measure time with nanosecond precision.
 - **`Makefile`**: Automates the build process.
+
+
+## Result 
+With : 
+- Matrix size: 16384 x 16384 (268435456 elements)
+- 26837519 non-zero elements (10.00%)
+
+I don't understand what need to be in the "Ref" column
+
+### Result for GCC
+
+|              | O0 | O2-novec | O3-vec | Ofast-vec | Ref |
+| :----------- | :------: | :------: | :------: | :------: | ----: |
+| my_dense     |   764   | 355 | 366 | 782 | ? |
+| my_coo       |   97   | 87 | 72 | 72 | ? |   
+| my_csr       |  85   | 74 | 131 | 74 | ? |
+| my_csc       |  105   | 33 | 30 | 31 | ? |
+
+### Result for ICC
+
+|              | O0 | O2-novec | O3-vec | Ofast-vec | Ref |
+| :----------- | :------: | :------: | :------: | :------: | ----: |
+| my_dense     |   749   | 357 | 157 | 158 | ? |
+| my_coo       |   97   | 75 | 73 | 73 | ? |   
+| my_csr       |  77   | 72 | 74 | 183 | ? |
+| my_csc       |  92   | 28 | 31 | 30 | ? |
