@@ -56,6 +56,16 @@ unsigned int check_result(double ref[], double result[], unsigned int size)
 
 int main(int argc, char *argv[])
 {
+    unsigned int coo_nnz, csc_nnz;
+    int *coo_row_indices, *coo_col_indices;
+    double *coo_values;
+
+    int *csc_col_ptr;
+    int *csc_row_indices;
+    double *csc_values;
+
+    
+
     int size;        // number of rows and cols (size x size matrix)
     double density;  // ratio of non-zero values
 
@@ -76,6 +86,47 @@ int main(int argc, char *argv[])
     vec = (double *) malloc(size * sizeof(double));
     refsol = (double *) malloc(size * sizeof(double));
     mysol = (double *) malloc(size * sizeof(double));
+
+    // Convert to COO format
+    dense_to_coo(mat, size, &coo_nnz, &coo_row_indices, &coo_col_indices, &coo_values);
+
+    // Convert to CSC format
+    dense_to_csc(mat, size, &csc_nnz, &csc_col_ptr, &csc_row_indices, &csc_values);
+    
+    printf("\nCOO SpMV Computation\n-------------------\n");
+
+    timestamp(&start);
+    coo_spmv(size, coo_nnz, coo_row_indices, coo_col_indices, coo_values, vec, mysol);
+    timestamp(&now);
+    printf("Time taken by COO SpMV: %ld ms\n", diff_milli(&start, &now));
+
+    if (check_result(refsol, mysol, size) == 1)
+        printf("COO SpMV result is ok!\n");
+    else
+        printf("COO SpMV result is wrong!\n");
+    
+    printf("\nCSC SpMV Computation\n-------------------\n");
+
+    timestamp(&start);
+    csc_spmv(size, csc_col_ptr, csc_row_indices, csc_values, vec, mysol);
+    timestamp(&now);
+    printf("Time taken by CSC SpMV: %ld ms\n", diff_milli(&start, &now));
+
+    if (check_result(refsol, mysol, size) == 1)
+        printf("CSC SpMV result is ok!\n");
+    else
+        printf("CSC SpMV result is wrong!\n");
+
+    // Free COO resources
+    free(coo_row_indices);
+    free(coo_col_indices);
+    free(coo_values);
+
+    // Free CSC resources
+    free(csc_col_ptr);
+    free(csc_row_indices);
+    free(csc_values);
+
 
     unsigned int nnz = populate_sparse_matrix(mat, size, density, 1);
     populate_vector(vec, size, 2);

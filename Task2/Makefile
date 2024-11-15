@@ -1,8 +1,9 @@
 # Compiler settings
-CC = gcc              # Compiler
-CFLAGS = -c -g           # Flags to compile without linking
+CC = gcc  # Default compiler
+CFLAGS = $(OPTFLAGS) -c -g          # Flags to compile without linking
 LDFLAGS = -lgsl -lm -lopenblas  # Link with OpenBLAS library
 EXEC = spmv           # Output executable name
+OPTFLAGS = -O0  # Default optimization level
 
 # Source files
 SRC = timer.c spmv.c my_dense.c my_sparse.c
