@@ -28,22 +28,21 @@ With :
 - Matrix size: 16384 x 16384 (268435456 elements)
 - 26837519 non-zero elements (10.00%)
 
-I don't understand what need to be in the "Ref" column
 
 ### Result for GCC
 
-|              | O0 | O2-novec | O3-vec | Ofast-vec | Ref |
-| :----------- | :------: | :------: | :------: | :------: | ----: |
-| my_dense     |   764   | 355 | 366 | 782 | ? |
-| my_coo       |   97   | 87 | 72 | 72 | ? |   
-| my_csr       |  85   | 74 | 131 | 74 | ? |
-| my_csc       |  105   | 33 | 30 | 31 | ? |
+|              | O0 | O2-novec | O3-vec | Ofast-vec |
+| :----------- | :------: | :------: | :------: | :------: |
+| my_dense     |   764   | 355 | 366 | 782 |
+| my_coo       |   97   | 87 | 72 | 72 |
+| my_csr       |  85   | 74 | 131 | 74 |
+| my_csc       |  105   | 33 | 30 | 31 |
 
 ### Result for ICC
 
-|              | O0 | O2-novec | O3-vec | Ofast-vec | Ref |
-| :----------- | :------: | :------: | :------: | :------: | ----: |
-| my_dense     |   749   | 357 | 157 | 158 | ? |
-| my_coo       |   97   | 75 | 73 | 73 | ? |   
-| my_csr       |  77   | 72 | 74 | 183 | ? |
-| my_csc       |  92   | 28 | 31 | 30 | ? |
+|              | O0 | O2-novec | O3-vec | Ofast-vec |
+| :----------- | :------: | :------: | :------: | :------: |
+| my_dense     |   749   | 357 | 157 | 158 |
+| my_coo       |   97   | 75 | 73 | 73 |
+| my_csr       |  77   | 72 | 74 | 183 |
+| my_csc       |  92   | 28 | 31 | 30 |
